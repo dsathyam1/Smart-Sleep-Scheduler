@@ -1,5 +1,0 @@
-[2025-08-25T07:57:06.193Z] User state: idle
-[2025-08-25T07:57:35.443Z] User idle for 00:30 after schedule. Starting countdown...
-[2025-08-25T07:57:35.449Z] Sleep countdown started | PC will sleep in 30 seconds
-[2025-08-25T07:57:38.458Z] User state: active
-[2025-08-25T07:57:39.502Z] Sleep cancelled by user
