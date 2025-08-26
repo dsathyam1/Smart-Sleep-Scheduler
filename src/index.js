@@ -5,7 +5,6 @@ const { formatTime } = require("./utils");
 const config = require("../config/config.json");
 const Joi = require("joi");
 
-// -------- Config Validation --------
 const schema = Joi.object({
   IDLE_THRESHOLD: Joi.number().min(1).required(),
   CONTINUOUS_IDLE_THRESHOLD: Joi.number().min(1).required(),
@@ -17,13 +16,10 @@ const schema = Joi.object({
 
 const { error, value: cfg } = schema.validate(config);
 if (error) throw new Error(`Invalid config: ${error.message}`);
-
-// -------- Initialize --------
 const idleMonitor = new IdleMonitor(cfg.IDLE_THRESHOLD, cfg.CONTINUOUS_IDLE_THRESHOLD);
 const sleepManager = new SleepManager(cfg.SLEEP_COUNTDOWN, cfg.SLEEP_COOLDOWN_MINUTES);
 let hasSlept = false;
 
-// -------- Main Loop --------
 setInterval(() => {
   try {
     const now = new Date();
@@ -32,7 +28,7 @@ setInterval(() => {
       (now.getHours() === cfg.SCHEDULE_HOURS && now.getMinutes() >= cfg.SCHEDULE_MINUTES);
 
     const { idleSeconds, state } = idleMonitor.getState();
-    logger.info(`Idle time: ${formatTime(idleSeconds)}, State: ${state}, Time: ${now.getHours()}:${now.getMinutes()}`);
+    logger.debug(`Idle time: ${formatTime(idleSeconds)}, State: ${state}, Time: ${now.getHours()}:${now.getMinutes()}`);
 
     if (!isAfterScheduledTime) {
       idleMonitor.idleCounter = 0;

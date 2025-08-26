@@ -27,7 +27,7 @@ class SleepManager {
       logger.error(`Notifier error before sleep: ${err.message}`);
     }
 
-    logger.info(`Sleep triggered | Reason: ${reason}`);
+    logger.info(`💤 PC going to sleep | Reason: ${reason}`);
 
     let command = "";
     const platform = process.platform;
@@ -44,11 +44,8 @@ class SleepManager {
       return;
     }
 
-    logger.info(`Executing command: ${command}`);
-
     try {
       await execAsync(command);
-      logger.info("PC is now sleeping...");
       this.lastSleep = Date.now();
     } catch (err) {
       logger.error(`Error putting PC to sleep: ${err.message}`);
@@ -57,7 +54,6 @@ class SleepManager {
 
   scheduleCountdown(reason = "Idle timeout") {
     if (this.timeout) {
-      logger.info("Sleep countdown already scheduled. Skipping...");
       return;
     }
 
@@ -67,10 +63,11 @@ class SleepManager {
       sound: true,
     });
 
-    logger.info(`Sleep countdown started | PC will sleep in ${this.countdown} seconds`);
+    logger.info(
+      `⏳ Sleep countdown started (${this.countdown}s) | Reason: ${reason}`
+    );
 
     this.timeout = setTimeout(() => {
-      logger.info("Countdown finished. Triggering sleep...");
       this.triggerSleep(reason);
       this.timeout = null;
     }, this.countdown * 1000);
