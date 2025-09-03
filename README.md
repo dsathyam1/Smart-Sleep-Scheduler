@@ -18,7 +18,7 @@ A cross-platform Node.js scheduler that automatically puts your PC to sleep when
 ## 🚀 Installation
 ```bash
 # Clone repository
-git clone https://github.com/yourusername/idlesleepscheduler.git
+git clone https://github.com/dsathyam1/Smart-Sleep-Scheduler
 cd idlesleepscheduler
 
 # Install dependencies
