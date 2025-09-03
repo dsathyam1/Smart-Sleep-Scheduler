@@ -16,8 +16,14 @@ const schema = Joi.object({
 
 const { error, value: cfg } = schema.validate(config);
 if (error) throw new Error(`Invalid config: ${error.message}`);
-const idleMonitor = new IdleMonitor(cfg.IDLE_THRESHOLD, cfg.CONTINUOUS_IDLE_THRESHOLD);
-const sleepManager = new SleepManager(cfg.SLEEP_COUNTDOWN, cfg.SLEEP_COOLDOWN_MINUTES);
+const idleMonitor = new IdleMonitor(
+  cfg.IDLE_THRESHOLD,
+  cfg.CONTINUOUS_IDLE_THRESHOLD
+);
+const sleepManager = new SleepManager(
+  cfg.SLEEP_COUNTDOWN,
+  cfg.SLEEP_COOLDOWN_MINUTES
+);
 let hasSlept = false;
 
 setInterval(() => {
@@ -25,10 +31,15 @@ setInterval(() => {
     const now = new Date();
     const isAfterScheduledTime =
       now.getHours() > cfg.SCHEDULE_HOURS ||
-      (now.getHours() === cfg.SCHEDULE_HOURS && now.getMinutes() >= cfg.SCHEDULE_MINUTES);
+      (now.getHours() === cfg.SCHEDULE_HOURS &&
+        now.getMinutes() >= cfg.SCHEDULE_MINUTES);
 
     const { idleSeconds, state } = idleMonitor.getState();
-    logger.debug(`Idle time: ${formatTime(idleSeconds)}, State: ${state}, Time: ${now.getHours()}:${now.getMinutes()}`);
+    logger.debug(
+      `Idle time: ${formatTime(
+        idleSeconds
+      )}, State: ${state}, Time: ${now.getHours()}:${now.getMinutes()}`
+    );
 
     if (!isAfterScheduledTime) {
       idleMonitor.idleCounter = 0;
@@ -38,12 +49,20 @@ setInterval(() => {
 
     idleMonitor.update(state);
 
-    if (state === "idle" && idleMonitor.isIdleLongEnough() && !hasSlept && sleepManager.canSleepAgain()) {
-      logger.info(`User idle for ${formatTime(cfg.CONTINUOUS_IDLE_THRESHOLD)} after schedule. Starting countdown...`);
+    if (
+      state === "idle" &&
+      idleMonitor.isIdleLongEnough() &&
+      !hasSlept &&
+      sleepManager.canSleepAgain()
+    ) {
+      logger.info(
+        `User idle for ${formatTime(
+          cfg.CONTINUOUS_IDLE_THRESHOLD
+        )} after schedule. Starting countdown...`
+      );
       sleepManager.scheduleCountdown();
       hasSlept = true;
     }
-
   } catch (err) {
     logger.error(`Unexpected error in main loop: ${err.message}`);
   }

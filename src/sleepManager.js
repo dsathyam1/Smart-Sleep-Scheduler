@@ -9,7 +9,7 @@ class SleepManager {
     this.countdown = countdownSec;
     this.cooldown = cooldownMin * 60 * 1000;
     this.lastSleep = 0;
-    this.timeout = null;
+    this.timeout = null;                                                
   }
 
   canSleepAgain() {
@@ -64,7 +64,7 @@ class SleepManager {
     });
 
     logger.info(
-      `⏳ Sleep countdown started (${this.countdown}s) | Reason: ${reason}`
+      ` Sleep countdown started (${this.countdown}s) | Reason: ${reason}`
     );
 
     this.timeout = setTimeout(() => {

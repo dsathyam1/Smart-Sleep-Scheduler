@@ -3,15 +3,15 @@ const logger = require("./logger");
 
 class IdleMonitor {
   constructor(threshold, continuousThreshold) {
-    this.threshold = threshold; 
-    this.continuousThreshold = continuousThreshold; 
+    this.threshold = threshold;
+    this.continuousThreshold = continuousThreshold;
     this.idleCounter = 0;
-    this.isIdle = false; 
+    this.isIdle = false;
   }
 
   getState() {
     const idleSeconds = RealIdle.getIdleSeconds();
-    const state = RealIdle.getIdleState(this.threshold); 
+    const state = RealIdle.getIdleState(this.threshold);
     return { idleSeconds, state };
   }
 
@@ -21,7 +21,9 @@ class IdleMonitor {
 
       if (!this.isIdle) {
         this.isIdle = true;
-        logger.info(`🟢 User went idle (threshold reached: ${this.threshold}s)`);
+        logger.info(
+          `🟢 User went idle (threshold reached: ${this.threshold}s)`
+        );
       }
     } else {
       if (this.isIdle) {
